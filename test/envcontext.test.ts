@@ -13,9 +13,9 @@ class ExampleStack extends cdk.Stack {
 /*
  * Example test
  */
-describe('Context from env vars', () => {
-  describe('Extract env vars', () => {
-    test('From default', () => {
+describe('EnvContext', () => {
+  describe('Environment variables are extracted', () => {
+    it('Uses default prefix, if non is specified', () => {
       process.env['CDK_CONTEXT_foo'] = 'foo';
       process.env['CDK_CONTEXT_bar'] = 'BAR';
       process.env['CDK_CONTEXT_BAZZOING'] = 'bazzoing';
@@ -30,7 +30,7 @@ describe('Context from env vars', () => {
       });
     });
 
-    test('From custom', () => {
+    it('Uses specified custom prefix', () => {
       process.env['__WHATEVER__foo'] = 'foo';
       process.env['__WHATEVER__bar'] = 'BAR';
       process.env['__WHATEVER__BAZZOING'] = 'bazzoing';
@@ -46,28 +46,19 @@ describe('Context from env vars', () => {
     });
   });
 
-  describe('App comes with context from env vars', () => {
+  describe('App provides context from environment variables', () => {
     process.env['__TEST_APPLY_CONTEXT_foo'] = 'foo';
     process.env['__TEST_APPLY_CONTEXT_bar'] = 'BAR';
     const app = new App({
-      envPrefix: '__TEST_APPLY_CONTEXT_',
+      contextEnvPrefix: '__TEST_APPLY_CONTEXT_',
     });
-    test('Env var context available from App', () => {
+    test('Env var context is available from App', () => {
       expect(app.node.tryGetContext('foo')).toEqual('foo');
       expect(app.node.tryGetContext('bar')).toEqual('BAR');
     });
-    test('Env var context available to childs', () => {
+    test('Env var context is available to children', () => {
       const stack = new ExampleStack(app, 'ExampleStack');
       expect(stack.state).toEqual('foo-BAR');
     });
   });
-  /* 
-  test('SNS Topic Created', () => {
-    const app = new App();
-    const stack = new cdk.Stack(app, 'TestStack');
-    // WHEN
-    new Envcontext.App(stack, 'MyTestConstruct');
-    // THEN
-    expectCDK(stack).to(countResources('AWS::SNS::Topic', 0));
-  }); */
 });
