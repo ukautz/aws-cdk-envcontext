@@ -8,10 +8,50 @@
 
 **Note:** The created NPM package is hosted on [Github packages}(https://github.com/features/packages) as I do not consider it production ready and do not want to contribute to accidental installs… Read up how to [use Github Packages hosted NPM packages](https://docs.github.com/en/packages/guides/configuring-npm-for-use-with-github-packages#installing-a-package) if you want to use it.
 
+in your `bin/file.ts`:
+
 ```typescript
-// TODO
+#!/usr/bin/env node
+import 'source-map-support/register';
+import * as cdk from '@aws-cdk/core';
+import { App } from '@ukautz/aws-cdk-envcontext';
+import { YourStack } from '../lib/your-stack';
+
+// use app from envcontext
+const app = new App();
+new YourStack(app, 'YourStack');
 ```
 
+Then in `lib/your-stack.ts`:
+
+```typescript
+import * as cdk from '@aws-cdk/core';
+
+export class ExamplesStack extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    new cdk.CfnOutput(this, 'Output', {
+      value: this.node.tryGetContext('foo'),
+    });
+  }
+}
+```
+
+Then in the command line:
+
+```shell
+$ export CDK_CONTEXT_foo=bar
+$ cdk synth
+```
+
+The rendered CloudFormation YAML should contain:
+
+```yaml
+Outputs:
+  Output:
+    Value: bar
+```
 
 
 ## Useful commands
