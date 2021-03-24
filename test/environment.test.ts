@@ -36,12 +36,12 @@ describe('Environment', () => {
   });
   test('all', () => {
     expect(env.all()).toEqual({ foo: 'foo', bar: 'BAR' });
-    expect(env.all({ foo: 'xxx' })).toEqual({ foo: 'foo', bar: 'BAR' });
-    expect(env.all({ foo2: 'xxx' })).toEqual({ foo: 'foo', foo2: 'xxx', bar: 'BAR' });
-    expect(() => env.all({ foo2: 'xxx' }, ['foo'])).not.toThrow();
-    expect(() => env.all({ foo2: 'xxx' }, ['foo', 'foo2'])).not.toThrow();
-    expect(() => env.all({ foo2: 'xxx' }, ['foo', 'foo2', 'bar'])).not.toThrow();
-    expect(() => env.all({ foo2: 'xxx' }, ['foo', 'foo2', 'bar', 'baz'])).toThrowError();
-    expect(() => env.all({ foo2: 'xxx' }, ['baz'])).toThrowError();
+    expect(env.all([], { foo: 'xxx' })).toEqual({ foo: 'foo', bar: 'BAR' });
+    expect(env.all([], { foo2: 'xxx' })).toEqual({ foo: 'foo', foo2: 'xxx', bar: 'BAR' });
+    expect(() => env.all(['foo'], { foo2: 'xxx' })).not.toThrow();
+    expect(() => env.all(['foo', 'foo2'], { foo2: 'xxx' })).not.toThrow();
+    expect(() => env.all(['foo', 'foo2', 'bar'], { foo2: 'xxx' })).not.toThrow();
+    expect(() => env.all(['foo', 'foo2', 'bar', 'baz'], { foo2: 'xxx' })).toThrowError();
+    expect(() => env.all(['baz'], { foo2: 'xxx' })).toThrowError();
   });
 });

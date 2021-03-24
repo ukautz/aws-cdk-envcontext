@@ -1,3 +1,4 @@
+import { withKeyPrefix } from './util';
 /**
  * Handle typical environment concerns in one simple class.
  */
@@ -11,7 +12,7 @@ export class Environment {
    * @returns Merge of default and existing environment variables
    * @throws Error in case any environment variable names are not defined
    */
-  public all = (defaultValues?: Record<string, string>, required?: string[]): Record<string, string> => {
+  public all = (required?: string[], defaultValues?: Record<string, string>): Record<string, string> => {
     const env = new Environment({
       ...(defaultValues ?? {}),
       ...this.env,
