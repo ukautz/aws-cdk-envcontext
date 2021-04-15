@@ -1,17 +1,5 @@
 import * as cdk from '@aws-cdk/core';
-import { Environment } from './environment';
-import { extractEnvironmentVariables } from './util';
-
-/**
- * Super-class of App that stores context
- */
-abstract class AppContext extends cdk.App {
-  public readonly context: Record<string, any>;
-  constructor(props: cdk.AppProps) {
-    super(props);
-    this.context = props.context ?? {};
-  }
-}
+import { extractEnvironmentVariables } from './environment';
 
 export interface AppProps extends cdk.AppProps {
   /**
@@ -34,8 +22,7 @@ export interface AppProps extends cdk.AppProps {
  * Per default any `CDK_CONTEXT_` prefixed environment variable will be added to context (prefix will be
  * removed in context name and can be set at all)
  */
-export class App extends AppContext {
-  public readonly env: Environment;
+export class App extends cdk.App {
   constructor(props: AppProps = {}) {
     super({
       ...props,
@@ -44,11 +31,5 @@ export class App extends AppContext {
         ...props.context,
       },
     });
-    this.env = new Environment(this.context);
-  }
-
-  public static envOf(scope: cdk.Construct): Environment {
-    const app = cdk.App.of(scope) as App;
-    return app.env;
   }
 }

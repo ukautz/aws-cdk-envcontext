@@ -1,12 +1,13 @@
 {
   "name": "@ukautz/aws-cdk-envcontext",
-  "version": "0.3.0-alpha1",
+  "version": "0.4.0-alpha1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "run": "tsc",
     "build": "tsc",
     "watch": "tsc -w",
+    "clean": "find test/ \\( -name \"*.js\" -or -name \"*.d.ts\" \\) -delete && find lib/ \\( -name \"*.js\" -or -name \"*.d.ts\" \\) -delete",
     "test": "jest"
   },
   "devDependencies": {

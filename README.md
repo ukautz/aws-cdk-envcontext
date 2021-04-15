@@ -16,11 +16,11 @@ in your `bin/file.ts`:
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { App } from '@ukautz/aws-cdk-envcontext';
+import * as envcontext from '@ukautz/aws-cdk-envcontext';
 import { YourStack } from '../lib/your-stack';
 
 // use app from envcontext
-const app = new App();
+const app = new envcontext.App();
 new YourStack(app, 'YourStack');
 ```
 
@@ -35,22 +35,16 @@ Then in `lib/your-stack.ts`:
 
 ```typescript
 import * as cdk from '@aws-cdk/core';
-import { App } from '@ukautz/aws-cdk-envcontext';
-
-export interface ExampleStackProps extends cdk.StackProps, envcontext.StackProps {}
 
 export class ExampleStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: ExampleStackProps) {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     // access context injected from env
-    this.node.tryGetContext('myVar')
-
-    // access App's Environment (or throw error if missing)
-    const someVar = App.envOf(this).must('someVar');
+    const myVar = this.node.tryGetContext('myVar');
 
     new cdk.CfnOutput(this, 'Vars', {
-      value: `myVar = ${myVar}, someVar = ${someVar}`, // will contain 'myVar = foo, someVar = bar'
+      value: `myVar = ${myVar}`, // will contain 'myVar = foo, someVar = bar'
     });
   }
 }
@@ -59,7 +53,7 @@ export class ExampleStack extends cdk.Stack {
 Then in the command line:
 
 ```shell
-$ export CDK_CONTEXT_foo=bar
+$ export CDK_CONTEXT_myVar=foo
 $ cdk synth
 ```
 
@@ -67,30 +61,32 @@ The rendered CloudFormation YAML should contain:
 
 ```yaml
 Outputs:
-  Output:
-    Value: bar
+  Vars:
+    Value: 'myVar = foo'
 ```
 
-### Common environment concerns
+### Using the context object
 
-Example
+When working with a lot of parameterized values in context, here a little syntax sugar and simplified API to work with context.
 
 ```typescript
-import { App } from '@ukautz/aws-cdk-envcontext';
-import { YourStack } from '../lib/your-stack';
+import * as cdk from '@aws-cdk/core';
+import { contextOf } from '@ukautz/aws-cdk-envcontext';
 
-// use app from envcontext
-const app = new App();
+export class ExampleStack extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+    const context = contextOf(this);
+    
+    // get optional value, with fallback to default if missing
+    const mayVar = context.may('myVar', 'saneDefault'); 
 
-// throw Error on missing environment variables
-app.env.require('myVar', 'otherVar');
+    // get mandatory value or throw exception if missing
+    const mustVar = context.must('otherVar');
 
-// get a single environment variable
-const myVar = app.env.must('myVar'); // throws Error if missing
-const someVar = app.env.may('someVar', 'default'); // returns default if not present
-
-// get all env vars, with given defaults
-const env = app.env.all({ someVar: 'default' });
+    // ...
+  }
+}
 ```
 
 ## Useful commands

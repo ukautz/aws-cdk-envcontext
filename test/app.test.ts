@@ -11,16 +11,6 @@ class ContextExampleStack extends cdk.Stack {
   }
 }
 
-class AppEnvironmentExampleStack extends cdk.Stack {
-  public readonly state: string;
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
-    const foo = App.envOf(this).may('foo') ?? 'undefined';
-    const bar = App.envOf(this).may('bar') ?? 'undefined';
-    this.state = `foo=${foo}, bar=${bar}`;
-  }
-}
-
 /*
  * Example test
  */
@@ -37,15 +27,5 @@ describe('App', () => {
   test('Env var context is available to children', () => {
     const stack = new ContextExampleStack(app, 'ContextExampleStack');
     expect(stack.state).toEqual('foo=foo, bar=BAR');
-  });
-  test('App Environment resolves available', () => {
-    const stack = new AppEnvironmentExampleStack(app, 'AppEnvironmentExampleStack');
-    expect(stack.state).toEqual('foo=foo, bar=BAR');
-  });
-  test('Env is available in App', () => {
-    expect(app.env.all()).toEqual({
-      foo: 'foo',
-      bar: 'BAR',
-    });
   });
 });
