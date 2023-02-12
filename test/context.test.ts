@@ -1,9 +1,10 @@
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { mayContext, mustContext, Context, contextOf } from '../lib/context';
 
 class ContextualStack extends cdk.Stack {
   public readonly fromContext: string;
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     const context = contextOf(this);
     this.fromContext = context.must('foo');
