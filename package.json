@@ -1,6 +1,6 @@
 {
   "name": "@ukautz/aws-cdk-envcontext",
-  "version": "0.6.0-beta1",
+  "version": "0.6.2-beta1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "license": "MIT",
