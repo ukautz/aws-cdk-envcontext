@@ -3,6 +3,10 @@
   "version": "0.6.0-beta1",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "run": "tsc",
     "build": "tsc",
