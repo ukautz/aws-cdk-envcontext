@@ -1,4 +1,4 @@
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
 import { extractEnvironmentVariables } from './environment';
 
 export interface AppProps extends cdk.AppProps {

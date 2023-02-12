@@ -1,9 +1,10 @@
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { App } from '../lib';
 
 class ContextExampleStack extends cdk.Stack {
   public readonly state: string;
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     const foo = this.node.tryGetContext('foo') ?? 'undefined';
     const bar = this.node.tryGetContext('bar') ?? 'undefined';

@@ -34,10 +34,11 @@ CDK_CONTEXT_otherVar=bar
 Then in `lib/your-stack.ts`:
 
 ```typescript
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
 export class ExampleStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     // access context injected from env
@@ -70,11 +71,12 @@ Outputs:
 When working with a lot of parameterized values in context, here a little syntax sugar and simplified API to work with context.
 
 ```typescript
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { contextOf } from '@ukautz/aws-cdk-envcontext';
 
 export class ExampleStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     const context = contextOf(this);
     
